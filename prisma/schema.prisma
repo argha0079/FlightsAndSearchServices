@@ -13,20 +13,26 @@ datasource db {
 }
 
 model Airplane {
-  id           Int      @id @default(autoincrement())
-  modelNumber  String   @map("model_number")
-  capacity     Int
-  flights      Flight[]
+  id          Int      @id @default(autoincrement())
+  modelNumber String   @map("model_number")
+  capacity    Int
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @default(now()) @updatedAt @map("updated_at")
+
+  flights Flight[]
 
   @@map("airplanes")
 }
 
 model City {
-  id                 Int       @id @default(autoincrement())
-  name               String
-  airports           Airport[]
-  departingFlights   Flight[]  @relation("DepartureCity")
-  arrivingFlights    Flight[]  @relation("DestinationCity")
+  id        Int      @id @default(autoincrement())
+  name      String
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @default(now()) @updatedAt @map("updated_at")
+
+  airports         Airport[]
+  departingFlights Flight[]  @relation("DepartureCity")
+  arrivingFlights  Flight[]  @relation("DestinationCity")
 
   @@map("cities")
 }
@@ -36,8 +42,11 @@ model Airport {
   name      String
   cityId    Int      @map("city_id")
   address   String?
-  city      City     @relation(fields: [cityId], references: [id])
-  flights   Flight[]
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @default(now()) @updatedAt @map("updated_at")
+
+  city    City     @relation(fields: [cityId], references: [id])
+  flights Flight[]
 
   @@map("airports")
 }
@@ -51,8 +60,9 @@ model Flight {
   airportId         Int      @map("airport_id")
   departure         DateTime
   arrival           DateTime
+  createdAt         DateTime @default(now()) @map("created_at")
+  updatedAt         DateTime @default(now()) @updatedAt @map("updated_at")
 
-  // Relations
   departureCity   City     @relation("DepartureCity", fields: [departureCityId], references: [id])
   destinationCity City     @relation("DestinationCity", fields: [destinationCityId], references: [id])
   airplane        Airplane @relation(fields: [airplaneId], references: [id])
