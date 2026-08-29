@@ -1,0 +1,62 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Get a free hosted Postgres database in seconds: `npx create-db`
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Airplane {
+  id           Int      @id @default(autoincrement())
+  modelNumber  String   @map("model_number")
+  capacity     Int
+  flights      Flight[]
+
+  @@map("airplanes")
+}
+
+model City {
+  id                 Int       @id @default(autoincrement())
+  name               String
+  airports           Airport[]
+  departingFlights   Flight[]  @relation("DepartureCity")
+  arrivingFlights    Flight[]  @relation("DestinationCity")
+
+  @@map("cities")
+}
+
+model Airport {
+  id        Int      @id @default(autoincrement())
+  name      String
+  cityId    Int      @map("city_id")
+  address   String?
+  city      City     @relation(fields: [cityId], references: [id])
+  flights   Flight[]
+
+  @@map("airports")
+}
+
+model Flight {
+  id                Int      @id @default(autoincrement())
+  flightNumber      String   @map("flight_number")
+  departureCityId   Int      @map("departure_city_id")
+  destinationCityId Int      @map("destination_city_id")
+  airplaneId        Int      @map("airplane_id")
+  airportId         Int      @map("airport_id")
+  departure         DateTime
+  arrival           DateTime
+
+  // Relations
+  departureCity   City     @relation("DepartureCity", fields: [departureCityId], references: [id])
+  destinationCity City     @relation("DestinationCity", fields: [destinationCityId], references: [id])
+  airplane        Airplane @relation(fields: [airplaneId], references: [id])
+  airport         Airport  @relation(fields: [airportId], references: [id])
+
+  @@map("flights")
+}
