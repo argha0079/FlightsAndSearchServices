@@ -58,4 +58,24 @@ export class CityRepository {
         }
     }
 
+    async getAllCities(filter) { // filter can be empty also
+        try {
+            if(filter.name) {
+                const cities = await prisma.city.findMany({
+                    where: {
+                        name: {
+                            startsWith: filter.name
+                        }
+                    }
+                })
+                return cities;
+            }
+            const cities = await prisma.city.findMany();
+            return cities;
+        } catch (error) {
+            console.log("Something went wrong in the repository layer");
+            throw {error};
+        }
+    }
+
 }
