@@ -1,12 +1,15 @@
 import { Router } from "express";
 import * as cityController from "../../controllers/city-controller.js"
+import * as airportController from "../../controllers/airport-controller.js"
 
 const router = Router();
 
-router.post("/city", cityController.create);
-router.delete("/city/:id", cityController.destroy);
-router.get("/city/:id", cityController.get);
-router.get("/city", cityController.getAll);
-router.patch("/city/:id", cityController.update);
+router.post("/cities", cityController.create);
+router.delete("/cities/:id", cityController.destroy);
+router.get("/cities/:id", cityController.get);
+router.get("/cities", cityController.getAll);
+router.patch("/cities/:id", cityController.update);
 
+
+router.get("/airports", airportController.getAirportByCity);
 export default router;
