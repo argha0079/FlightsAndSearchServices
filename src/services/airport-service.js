@@ -4,9 +4,9 @@ const airportRepository = new AirportRepository();
 
 export class AirportService {
 
-    async getAirportByCity(cityId) {
+    async getAirportByCity(cityId, filter) {
         try {
-            const airports = await airportRepository.getAirportByCity(cityId);
+            const airports = await airportRepository.getAirportByCity(cityId, filter);
             return airports;
 
         } catch (error) {

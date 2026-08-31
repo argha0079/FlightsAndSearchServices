@@ -2,12 +2,22 @@ import { prisma } from "../config/dbConfig.js";
 
 export class AirportRepository {
 
-    async getAirportByCity(cityId) {
+    async getAirportByCity(cityId, filter) {
         try {
             if (cityId) {
                 const airports = await prisma.airport.findMany({
                     where: {
                         cityId
+                    }
+                })
+                return airports;
+            }
+            if(filter) {
+                const airports = await prisma.airport.findMany({
+                    where: {
+                        name: {
+                            startsWith: filter.name
+                        }
                     }
                 })
                 return airports;

@@ -2,7 +2,7 @@ import express from "express";
 import { PORT } from "./config/envConfig.js";
 import bodyParser from "body-parser";
 import { connectDatabase } from "./config/dbConfig.js";
-import apiRoutes from "./routes/index.js"
+import apiRouter from "./routes/index.js"
 
 const setupAndStartServer = async () => {
 
@@ -12,7 +12,7 @@ const setupAndStartServer = async () => {
     app.use(bodyParser.json());
     app.use(bodyParser.urlencoded({ extended: true }));
 
-    app.use('/api', apiRoutes);
+    app.use('/api', apiRouter);
 
     await connectDatabase();
 
