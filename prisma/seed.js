@@ -1,234 +1,331 @@
 import { prisma } from "../src/config/dbConfig.js";
 
 async function main() {
-  // ---------------------------------------------------------
+  // =========================================================
   // CLEAR EXISTING DATA
-  // ---------------------------------------------------------
-  // Delete child records before parent records because of
-  // foreign-key constraints.
+  // =========================================================
+
+  // Delete child tables first because of foreign key constraints.
   await prisma.flight.deleteMany();
   await prisma.airport.deleteMany();
   await prisma.airplane.deleteMany();
   await prisma.city.deleteMany();
 
-  // ---------------------------------------------------------
-  // 1. CREATE CITIES
-  // ---------------------------------------------------------
+  console.log("Existing data cleared.");
 
-  const cities = await Promise.all([
+  // =========================================================
+  // 1. CREATE INDIAN CITIES
+  // =========================================================
+
+  const [
+    delhi,
+    mumbai,
+    bengaluru,
+    kolkata,
+    hyderabad,
+    chennai,
+    ahmedabad,
+    pune,
+    kochi,
+    jaipur,
+  ] = await Promise.all([
     prisma.city.create({
-      data: { name: "New York" },
+      data: {
+        name: "Delhi",
+      },
     }),
 
     prisma.city.create({
-      data: { name: "London" },
+      data: {
+        name: "Mumbai",
+      },
     }),
 
     prisma.city.create({
-      data: { name: "Delhi" },
+      data: {
+        name: "Bengaluru",
+      },
     }),
 
     prisma.city.create({
-      data: { name: "Dubai" },
+      data: {
+        name: "Kolkata",
+      },
     }),
 
     prisma.city.create({
-      data: { name: "Singapore" },
+      data: {
+        name: "Hyderabad",
+      },
     }),
 
     prisma.city.create({
-      data: { name: "Tokyo" },
+      data: {
+        name: "Chennai",
+      },
     }),
 
     prisma.city.create({
-      data: { name: "Paris" },
+      data: {
+        name: "Ahmedabad",
+      },
     }),
 
     prisma.city.create({
-      data: { name: "Frankfurt" },
+      data: {
+        name: "Pune",
+      },
     }),
 
     prisma.city.create({
-      data: { name: "Sydney" },
+      data: {
+        name: "Kochi",
+      },
     }),
 
     prisma.city.create({
-      data: { name: "Toronto" },
+      data: {
+        name: "Jaipur",
+      },
     }),
   ]);
 
-  // Give the city objects meaningful names instead of accessing
-  // cities[0], cities[1], etc.
-  const [
-    newYork,
-    london,
-    delhi,
-    dubai,
-    singapore,
-    tokyo,
-    paris,
-    frankfurt,
-    sydney,
-    toronto,
-  ] = cities;
+  console.log("Cities created.");
 
-  // ---------------------------------------------------------
+  // =========================================================
   // 2. CREATE AIRPORTS
-  // ---------------------------------------------------------
+  //
+  // IMPORTANT:
+  // Multiple airports intentionally belong to some cities.
+  // This gives you proper one-to-many relationship data.
+  // =========================================================
 
-  const airports = await Promise.all([
-    prisma.airport.create({
-      data: {
-        name: "John F. Kennedy International Airport",
-        address: "Queens, NY 11430, USA",
-        cityId: newYork.id,
-      },
-    }),
+  const [
+    indiraGandhiAirport,
+    safdarjungAirport,
 
-    prisma.airport.create({
-      data: {
-        name: "London Heathrow Airport",
-        address: "Hounslow, London TW6, UK",
-        cityId: london.id,
-      },
-    }),
+    chhatrapatiShivajiAirport,
+    juhuAirport,
+
+    kempegowdaAirport,
+
+    netajiSubhasAirport,
+    behalaAirport,
+
+    rajivGandhiAirport,
+    begumpetAirport,
+
+    chennaiAirport,
+
+    sardarVallabhbhaiAirport,
+
+    puneAirport,
+
+    cochinAirport,
+
+    jaipurAirport,
+  ] = await Promise.all([
+    // -------------------------------------------------------
+    // DELHI - 2 airports
+    // -------------------------------------------------------
 
     prisma.airport.create({
       data: {
         name: "Indira Gandhi International Airport",
-        address: "New Delhi, Delhi 110037, India",
+        address: "Palam, New Delhi, Delhi 110037",
         cityId: delhi.id,
       },
     }),
 
     prisma.airport.create({
       data: {
-        name: "Dubai International Airport",
-        address: "Dubai, United Arab Emirates",
-        cityId: dubai.id,
+        name: "Safdarjung Airport",
+        address: "New Delhi, Delhi 110003",
+        cityId: delhi.id,
+      },
+    }),
+
+    // -------------------------------------------------------
+    // MUMBAI - 2 airports
+    // -------------------------------------------------------
+
+    prisma.airport.create({
+      data: {
+        name: "Chhatrapati Shivaji Maharaj International Airport",
+        address: "Andheri East, Mumbai, Maharashtra 400099",
+        cityId: mumbai.id,
       },
     }),
 
     prisma.airport.create({
       data: {
-        name: "Singapore Changi Airport",
-        address: "Airport Boulevard, Singapore 819643",
-        cityId: singapore.id,
+        name: "Juhu Airport",
+        address: "Vile Parle West, Mumbai, Maharashtra 400056",
+        cityId: mumbai.id,
+      },
+    }),
+
+    // -------------------------------------------------------
+    // BENGALURU
+    // -------------------------------------------------------
+
+    prisma.airport.create({
+      data: {
+        name: "Kempegowda International Airport",
+        address: "Devanahalli, Bengaluru, Karnataka 560300",
+        cityId: bengaluru.id,
+      },
+    }),
+
+    // -------------------------------------------------------
+    // KOLKATA - 2 airports
+    // -------------------------------------------------------
+
+    prisma.airport.create({
+      data: {
+        name: "Netaji Subhas Chandra Bose International Airport",
+        address: "Jessore Road, Kolkata, West Bengal 700052",
+        cityId: kolkata.id,
       },
     }),
 
     prisma.airport.create({
       data: {
-        name: "Haneda Airport",
-        address: "Ota City, Tokyo 144-0041, Japan",
-        cityId: tokyo.id,
+        name: "Behala Airport",
+        address: "Behala, Kolkata, West Bengal",
+        cityId: kolkata.id,
+      },
+    }),
+
+    // -------------------------------------------------------
+    // HYDERABAD - 2 airports
+    // -------------------------------------------------------
+
+    prisma.airport.create({
+      data: {
+        name: "Rajiv Gandhi International Airport",
+        address: "Shamshabad, Hyderabad, Telangana 500409",
+        cityId: hyderabad.id,
       },
     }),
 
     prisma.airport.create({
       data: {
-        name: "Paris Charles de Gaulle Airport",
-        address: "Roissy-en-France, 95700, France",
-        cityId: paris.id,
+        name: "Begumpet Airport",
+        address: "Begumpet, Hyderabad, Telangana 500016",
+        cityId: hyderabad.id,
       },
     }),
 
-    prisma.airport.create({
-      data: {
-        name: "Frankfurt Airport",
-        address: "60547 Frankfurt, Germany",
-        cityId: frankfurt.id,
-      },
-    }),
+    // -------------------------------------------------------
+    // CHENNAI
+    // -------------------------------------------------------
 
     prisma.airport.create({
       data: {
-        name: "Sydney Kingsford Smith Airport",
-        address: "Mascot, NSW 2020, Australia",
-        cityId: sydney.id,
+        name: "Chennai International Airport",
+        address: "Meenambakkam, Chennai, Tamil Nadu 600027",
+        cityId: chennai.id,
       },
     }),
 
+    // -------------------------------------------------------
+    // AHMEDABAD
+    // -------------------------------------------------------
+
     prisma.airport.create({
       data: {
-        name: "Toronto Pearson International Airport",
-        address: "Mississauga, Ontario L5P 1B2, Canada",
-        cityId: toronto.id,
+        name: "Sardar Vallabhbhai Patel International Airport",
+        address: "Hansol, Ahmedabad, Gujarat 382475",
+        cityId: ahmedabad.id,
+      },
+    }),
+
+    // -------------------------------------------------------
+    // PUNE
+    // -------------------------------------------------------
+
+    prisma.airport.create({
+      data: {
+        name: "Pune International Airport",
+        address: "Lohegaon, Pune, Maharashtra 411032",
+        cityId: pune.id,
+      },
+    }),
+
+    // -------------------------------------------------------
+    // KOCHI
+    // -------------------------------------------------------
+
+    prisma.airport.create({
+      data: {
+        name: "Cochin International Airport",
+        address: "Nedumbassery, Kochi, Kerala 683111",
+        cityId: kochi.id,
+      },
+    }),
+
+    // -------------------------------------------------------
+    // JAIPUR
+    // -------------------------------------------------------
+
+    prisma.airport.create({
+      data: {
+        name: "Jaipur International Airport",
+        address: "Sanganer, Jaipur, Rajasthan 302029",
+        cityId: jaipur.id,
       },
     }),
   ]);
 
-  const [
-    jfk,
-    heathrow,
-    delhiAirport,
-    dubaiAirport,
-    changi,
-    haneda,
-    charlesDeGaulle,
-    frankfurtAirport,
-    sydneyAirport,
-    torontoPearson,
-  ] = airports;
+  console.log("Airports created.");
 
-  // ---------------------------------------------------------
+  // =========================================================
   // 3. CREATE AIRPLANES
-  // ---------------------------------------------------------
+  //
+  // The aircraft models are real.
+  // Capacities are representative values for practice.
+  // =========================================================
 
-  const airplanes = await Promise.all([
+  const [
+    airbusA320,
+    airbusA320neo,
+    airbusA321neo,
+    boeing737800,
+    boeing737Max8,
+    boeing7878,
+    boeing7879,
+    airbusA330200,
+    airbusA350900,
+    boeing777300ER,
+    atr72,
+    bombardierQ400,
+  ] = await Promise.all([
     prisma.airplane.create({
       data: {
-        modelNumber: "Boeing 777-300ER",
-        capacity: 396,
+        modelNumber: "Airbus A320",
+        capacity: 180,
       },
     }),
 
     prisma.airplane.create({
       data: {
-        modelNumber: "Airbus A350-900",
-        capacity: 325,
+        modelNumber: "Airbus A320neo",
+        capacity: 180,
       },
     }),
 
     prisma.airplane.create({
       data: {
-        modelNumber: "Boeing 787-9 Dreamliner",
-        capacity: 296,
+        modelNumber: "Airbus A321neo",
+        capacity: 232,
       },
     }),
 
     prisma.airplane.create({
       data: {
-        modelNumber: "Airbus A380-800",
-        capacity: 555,
-      },
-    }),
-
-    prisma.airplane.create({
-      data: {
-        modelNumber: "Boeing 777-200LR",
-        capacity: 317,
-      },
-    }),
-
-    prisma.airplane.create({
-      data: {
-        modelNumber: "Airbus A330-300",
-        capacity: 277,
-      },
-    }),
-
-    prisma.airplane.create({
-      data: {
-        modelNumber: "Boeing 787-10 Dreamliner",
-        capacity: 336,
-      },
-    }),
-
-    prisma.airplane.create({
-      data: {
-        modelNumber: "Airbus A350-1000",
-        capacity: 369,
+        modelNumber: "Boeing 737-800",
+        capacity: 189,
       },
     }),
 
@@ -241,165 +338,481 @@ async function main() {
 
     prisma.airplane.create({
       data: {
-        modelNumber: "Airbus A321neo",
-        capacity: 244,
+        modelNumber: "Boeing 787-8 Dreamliner",
+        capacity: 248,
+      },
+    }),
+
+    prisma.airplane.create({
+      data: {
+        modelNumber: "Boeing 787-9 Dreamliner",
+        capacity: 296,
+      },
+    }),
+
+    prisma.airplane.create({
+      data: {
+        modelNumber: "Airbus A330-200",
+        capacity: 250,
+      },
+    }),
+
+    prisma.airplane.create({
+      data: {
+        modelNumber: "Airbus A350-900",
+        capacity: 325,
+      },
+    }),
+
+    prisma.airplane.create({
+      data: {
+        modelNumber: "Boeing 777-300ER",
+        capacity: 396,
+      },
+    }),
+
+    prisma.airplane.create({
+      data: {
+        modelNumber: "ATR 72-600",
+        capacity: 78,
+      },
+    }),
+
+    prisma.airplane.create({
+      data: {
+        modelNumber: "Bombardier Dash 8 Q400",
+        capacity: 78,
       },
     }),
   ]);
 
-  const [
-    boeing777,
-    airbusA350,
-    boeing787,
-    airbusA380,
-    boeing777LR,
-    airbusA330,
-    boeing78710,
-    airbusA3501000,
-    boeing737,
-    airbusA321,
-  ] = airplanes;
+  console.log("Airplanes created.");
 
-  // ---------------------------------------------------------
+  // =========================================================
   // 4. CREATE FLIGHTS
-  // ---------------------------------------------------------
   //
-  // The dates/times are deliberately sample schedules for
-  // testing your application.
+  // This section deliberately creates:
   //
-  // airportId represents the airport associated with the flight.
-  // ---------------------------------------------------------
+  // - Multiple flights from the same city
+  // - Multiple flights to the same city
+  // - Different airplanes
+  // - Different airports
+  // - Repeated routes
+  //
+  // This is much better for API practice.
+  // =========================================================
 
-  await prisma.flight.create({
-    data: {
-      flightNumber: "AA100",
-      departureCityId: newYork.id,
-      destinationCityId: london.id,
-      airplaneId: boeing777.id,
-      airportId: jfk.id,
-      departure: new Date("2026-09-01T18:30:00Z"),
-      arrival: new Date("2026-09-02T06:30:00Z"),
-    },
-  });
+  const flights = [
+    // =======================================================
+    // DELHI -> MUMBAI
+    // =======================================================
 
-  await prisma.flight.create({
-    data: {
-      flightNumber: "BA178",
-      departureCityId: london.id,
-      destinationCityId: newYork.id,
-      airplaneId: airbusA350.id,
-      airportId: heathrow.id,
-      departure: new Date("2026-09-02T14:00:00Z"),
-      arrival: new Date("2026-09-02T17:00:00Z"),
-    },
-  });
-
-  await prisma.flight.create({
-    data: {
-      flightNumber: "AI101",
+    {
+      flightNumber: "IND101",
       departureCityId: delhi.id,
-      destinationCityId: newYork.id,
-      airplaneId: boeing787.id,
-      airportId: delhiAirport.id,
+      destinationCityId: mumbai.id,
+      airplaneId: airbusA320neo.id,
+      airportId: indiraGandhiAirport.id,
+      departure: new Date("2026-09-01T03:30:00Z"),
+      arrival: new Date("2026-09-01T05:45:00Z"),
+    },
+
+    {
+      flightNumber: "IND102",
+      departureCityId: delhi.id,
+      destinationCityId: mumbai.id,
+      airplaneId: boeing737800.id,
+      airportId: indiraGandhiAirport.id,
+      departure: new Date("2026-09-01T10:00:00Z"),
+      arrival: new Date("2026-09-01T12:15:00Z"),
+    },
+
+    // =======================================================
+    // MUMBAI -> DELHI
+    // =======================================================
+
+    {
+      flightNumber: "IND201",
+      departureCityId: mumbai.id,
+      destinationCityId: delhi.id,
+      airplaneId: airbusA321neo.id,
+      airportId: chhatrapatiShivajiAirport.id,
+      departure: new Date("2026-09-01T05:00:00Z"),
+      arrival: new Date("2026-09-01T07:15:00Z"),
+    },
+
+    {
+      flightNumber: "IND202",
+      departureCityId: mumbai.id,
+      destinationCityId: delhi.id,
+      airplaneId: boeing737Max8.id,
+      airportId: chhatrapatiShivajiAirport.id,
+      departure: new Date("2026-09-02T12:30:00Z"),
+      arrival: new Date("2026-09-02T14:45:00Z"),
+    },
+
+    // =======================================================
+    // DELHI -> BENGALURU
+    // =======================================================
+
+    {
+      flightNumber: "IND301",
+      departureCityId: delhi.id,
+      destinationCityId: bengaluru.id,
+      airplaneId: airbusA320.id,
+      airportId: indiraGandhiAirport.id,
+      departure: new Date("2026-09-02T04:30:00Z"),
+      arrival: new Date("2026-09-02T07:15:00Z"),
+    },
+
+    // =======================================================
+    // BENGALURU -> DELHI
+    // =======================================================
+
+    {
+      flightNumber: "IND302",
+      departureCityId: bengaluru.id,
+      destinationCityId: delhi.id,
+      airplaneId: airbusA320neo.id,
+      airportId: kempegowdaAirport.id,
+      departure: new Date("2026-09-02T09:00:00Z"),
+      arrival: new Date("2026-09-02T11:45:00Z"),
+    },
+
+    // =======================================================
+    // KOLKATA -> DELHI
+    // =======================================================
+
+    {
+      flightNumber: "IND401",
+      departureCityId: kolkata.id,
+      destinationCityId: delhi.id,
+      airplaneId: boeing737800.id,
+      airportId: netajiSubhasAirport.id,
       departure: new Date("2026-09-03T02:00:00Z"),
-      arrival: new Date("2026-09-03T14:30:00Z"),
+      arrival: new Date("2026-09-03T04:30:00Z"),
     },
-  });
 
-  await prisma.flight.create({
-    data: {
-      flightNumber: "EK201",
-      departureCityId: dubai.id,
-      destinationCityId: newYork.id,
-      airplaneId: airbusA380.id,
-      airportId: dubaiAirport.id,
-      departure: new Date("2026-09-04T08:00:00Z"),
-      arrival: new Date("2026-09-04T19:00:00Z"),
+    // =======================================================
+    // DELHI -> KOLKATA
+    // =======================================================
+
+    {
+      flightNumber: "IND402",
+      departureCityId: delhi.id,
+      destinationCityId: kolkata.id,
+      airplaneId: airbusA321neo.id,
+      airportId: indiraGandhiAirport.id,
+      departure: new Date("2026-09-03T08:00:00Z"),
+      arrival: new Date("2026-09-03T10:30:00Z"),
     },
-  });
 
-  await prisma.flight.create({
-    data: {
-      flightNumber: "SQ12",
-      departureCityId: singapore.id,
-      destinationCityId: tokyo.id,
-      airplaneId: boeing777LR.id,
-      airportId: changi.id,
-      departure: new Date("2026-09-05T09:30:00Z"),
-      arrival: new Date("2026-09-05T17:00:00Z"),
+    // =======================================================
+    // MUMBAI -> KOLKATA
+    // =======================================================
+
+    {
+      flightNumber: "IND501",
+      departureCityId: mumbai.id,
+      destinationCityId: kolkata.id,
+      airplaneId: boeing737Max8.id,
+      airportId: chhatrapatiShivajiAirport.id,
+      departure: new Date("2026-09-04T04:00:00Z"),
+      arrival: new Date("2026-09-04T06:45:00Z"),
     },
-  });
 
-  await prisma.flight.create({
-    data: {
-      flightNumber: "JL5",
-      departureCityId: tokyo.id,
-      destinationCityId: newYork.id,
-      airplaneId: airbusA330.id,
-      airportId: haneda.id,
-      departure: new Date("2026-09-06T16:00:00Z"),
-      arrival: new Date("2026-09-06T19:00:00Z"),
+    // =======================================================
+    // KOLKATA -> MUMBAI
+    // =======================================================
+
+    {
+      flightNumber: "IND502",
+      departureCityId: kolkata.id,
+      destinationCityId: mumbai.id,
+      airplaneId: airbusA320neo.id,
+      airportId: netajiSubhasAirport.id,
+      departure: new Date("2026-09-04T11:00:00Z"),
+      arrival: new Date("2026-09-04T13:45:00Z"),
     },
-  });
 
-  await prisma.flight.create({
-    data: {
-      flightNumber: "AF66",
-      departureCityId: paris.id,
-      destinationCityId: newYork.id,
-      airplaneId: boeing78710.id,
-      airportId: charlesDeGaulle.id,
-      departure: new Date("2026-09-07T12:00:00Z"),
-      arrival: new Date("2026-09-07T14:30:00Z"),
+    // =======================================================
+    // HYDERABAD -> MUMBAI
+    // =======================================================
+
+    {
+      flightNumber: "IND601",
+      departureCityId: hyderabad.id,
+      destinationCityId: mumbai.id,
+      airplaneId: airbusA320.id,
+      airportId: rajivGandhiAirport.id,
+      departure: new Date("2026-09-05T03:00:00Z"),
+      arrival: new Date("2026-09-05T04:30:00Z"),
     },
-  });
 
-  await prisma.flight.create({
-    data: {
-      flightNumber: "LH400",
-      departureCityId: frankfurt.id,
-      destinationCityId: newYork.id,
-      airplaneId: airbusA3501000.id,
-      airportId: frankfurtAirport.id,
-      departure: new Date("2026-09-08T10:00:00Z"),
-      arrival: new Date("2026-09-08T13:00:00Z"),
+    // =======================================================
+    // MUMBAI -> HYDERABAD
+    // =======================================================
+
+    {
+      flightNumber: "IND602",
+      departureCityId: mumbai.id,
+      destinationCityId: hyderabad.id,
+      airplaneId: airbusA321neo.id,
+      airportId: chhatrapatiShivajiAirport.id,
+      departure: new Date("2026-09-05T08:00:00Z"),
+      arrival: new Date("2026-09-05T09:30:00Z"),
     },
-  });
 
-  await prisma.flight.create({
-    data: {
-      flightNumber: "QF11",
-      departureCityId: sydney.id,
-      destinationCityId: london.id,
-      airplaneId: boeing737.id,
-      airportId: sydneyAirport.id,
-      departure: new Date("2026-09-09T20:00:00Z"),
-      arrival: new Date("2026-09-10T14:00:00Z"),
+    // =======================================================
+    // CHENNAI -> BENGALURU
+    // =======================================================
+
+    {
+      flightNumber: "IND701",
+      departureCityId: chennai.id,
+      destinationCityId: bengaluru.id,
+      airplaneId: bombardierQ400.id,
+      airportId: chennaiAirport.id,
+      departure: new Date("2026-09-06T02:30:00Z"),
+      arrival: new Date("2026-09-06T03:45:00Z"),
     },
-  });
 
-  await prisma.flight.create({
-    data: {
-      flightNumber: "AC1",
-      departureCityId: toronto.id,
-      destinationCityId: london.id,
-      airplaneId: airbusA321.id,
-      airportId: torontoPearson.id,
-      departure: new Date("2026-09-10T21:00:00Z"),
-      arrival: new Date("2026-09-11T09:00:00Z"),
+    // =======================================================
+    // BENGALURU -> CHENNAI
+    // =======================================================
+
+    {
+      flightNumber: "IND702",
+      departureCityId: bengaluru.id,
+      destinationCityId: chennai.id,
+      airplaneId: atr72.id,
+      airportId: kempegowdaAirport.id,
+      departure: new Date("2026-09-06T07:00:00Z"),
+      arrival: new Date("2026-09-06T08:15:00Z"),
     },
-  });
 
-  console.log("Database successfully seeded.");
+    // =======================================================
+    // CHENNAI -> HYDERABAD
+    // =======================================================
+
+    {
+      flightNumber: "IND801",
+      departureCityId: chennai.id,
+      destinationCityId: hyderabad.id,
+      airplaneId: airbusA320neo.id,
+      airportId: chennaiAirport.id,
+      departure: new Date("2026-09-07T04:00:00Z"),
+      arrival: new Date("2026-09-07T05:30:00Z"),
+    },
+
+    // =======================================================
+    // HYDERABAD -> CHENNAI
+    // =======================================================
+
+    {
+      flightNumber: "IND802",
+      departureCityId: hyderabad.id,
+      destinationCityId: chennai.id,
+      airplaneId: boeing737800.id,
+      airportId: rajivGandhiAirport.id,
+      departure: new Date("2026-09-07T10:00:00Z"),
+      arrival: new Date("2026-09-07T11:30:00Z"),
+    },
+
+    // =======================================================
+    // AHMEDABAD -> MUMBAI
+    // =======================================================
+
+    {
+      flightNumber: "IND901",
+      departureCityId: ahmedabad.id,
+      destinationCityId: mumbai.id,
+      airplaneId: airbusA320.id,
+      airportId: sardarVallabhbhaiAirport.id,
+      departure: new Date("2026-09-08T03:30:00Z"),
+      arrival: new Date("2026-09-08T04:45:00Z"),
+    },
+
+    // =======================================================
+    // MUMBAI -> AHMEDABAD
+    // =======================================================
+
+    {
+      flightNumber: "IND902",
+      departureCityId: mumbai.id,
+      destinationCityId: ahmedabad.id,
+      airplaneId: boeing737Max8.id,
+      airportId: chhatrapatiShivajiAirport.id,
+      departure: new Date("2026-09-08T08:00:00Z"),
+      arrival: new Date("2026-09-08T09:15:00Z"),
+    },
+
+    // =======================================================
+    // PUNE -> DELHI
+    // =======================================================
+
+    {
+      flightNumber: "IND1001",
+      departureCityId: pune.id,
+      destinationCityId: delhi.id,
+      airplaneId: airbusA321neo.id,
+      airportId: puneAirport.id,
+      departure: new Date("2026-09-09T02:00:00Z"),
+      arrival: new Date("2026-09-09T04:15:00Z"),
+    },
+
+    // =======================================================
+    // DELHI -> PUNE
+    // =======================================================
+
+    {
+      flightNumber: "IND1002",
+      departureCityId: delhi.id,
+      destinationCityId: pune.id,
+      airplaneId: airbusA320neo.id,
+      airportId: indiraGandhiAirport.id,
+      departure: new Date("2026-09-09T09:00:00Z"),
+      arrival: new Date("2026-09-09T11:15:00Z"),
+    },
+
+    // =======================================================
+    // KOCHI -> MUMBAI
+    // =======================================================
+
+    {
+      flightNumber: "IND1101",
+      departureCityId: kochi.id,
+      destinationCityId: mumbai.id,
+      airplaneId: boeing737800.id,
+      airportId: cochinAirport.id,
+      departure: new Date("2026-09-10T03:00:00Z"),
+      arrival: new Date("2026-09-10T05:00:00Z"),
+    },
+
+    // =======================================================
+    // MUMBAI -> KOCHI
+    // =======================================================
+
+    {
+      flightNumber: "IND1102",
+      departureCityId: mumbai.id,
+      destinationCityId: kochi.id,
+      airplaneId: airbusA320.id,
+      airportId: chhatrapatiShivajiAirport.id,
+      departure: new Date("2026-09-10T09:00:00Z"),
+      arrival: new Date("2026-09-10T11:00:00Z"),
+    },
+
+    // =======================================================
+    // JAIPUR -> DELHI
+    // =======================================================
+
+    {
+      flightNumber: "IND1201",
+      departureCityId: jaipur.id,
+      destinationCityId: delhi.id,
+      airplaneId: atr72.id,
+      airportId: jaipurAirport.id,
+      departure: new Date("2026-09-11T04:00:00Z"),
+      arrival: new Date("2026-09-11T05:00:00Z"),
+    },
+
+    // =======================================================
+    // DELHI -> JAIPUR
+    // =======================================================
+
+    {
+      flightNumber: "IND1202",
+      departureCityId: delhi.id,
+      destinationCityId: jaipur.id,
+      airplaneId: bombardierQ400.id,
+      airportId: indiraGandhiAirport.id,
+      departure: new Date("2026-09-11T10:00:00Z"),
+      arrival: new Date("2026-09-11T11:00:00Z"),
+    },
+
+    // =======================================================
+    // LONGER DOMESTIC ROUTES
+    // =======================================================
+
+    {
+      flightNumber: "IND1301",
+      departureCityId: delhi.id,
+      destinationCityId: kochi.id,
+      airplaneId: boeing7878.id,
+      airportId: indiraGandhiAirport.id,
+      departure: new Date("2026-09-12T01:30:00Z"),
+      arrival: new Date("2026-09-12T05:00:00Z"),
+    },
+
+    {
+      flightNumber: "IND1302",
+      departureCityId: kochi.id,
+      destinationCityId: delhi.id,
+      airplaneId: boeing7879.id,
+      airportId: cochinAirport.id,
+      departure: new Date("2026-09-12T08:00:00Z"),
+      arrival: new Date("2026-09-12T11:30:00Z"),
+    },
+
+    {
+      flightNumber: "IND1401",
+      departureCityId: mumbai.id,
+      destinationCityId: bengaluru.id,
+      airplaneId: airbusA350900.id,
+      airportId: chhatrapatiShivajiAirport.id,
+      departure: new Date("2026-09-13T03:00:00Z"),
+      arrival: new Date("2026-09-13T04:45:00Z"),
+    },
+
+    {
+      flightNumber: "IND1402",
+      departureCityId: bengaluru.id,
+      destinationCityId: mumbai.id,
+      airplaneId: boeing777300ER.id,
+      airportId: kempegowdaAirport.id,
+      departure: new Date("2026-09-13T09:00:00Z"),
+      arrival: new Date("2026-09-13T10:45:00Z"),
+    },
+  ];
+
+  // =========================================================
+  // INSERT ALL FLIGHTS
+  // =========================================================
+
+  await Promise.all(
+    flights.map((flight) =>
+      prisma.flight.create({
+        data: flight,
+      })
+    )
+  );
+
+  console.log("Flights created.");
+
+  // =========================================================
+  // SUCCESS
+  // =========================================================
+
+  console.log("======================================");
+  console.log("Database successfully seeded!");
+  console.log("======================================");
+  console.log("Cities: 10");
+  console.log("Airports: 14");
+  console.log("Airplanes: 12");
+  console.log("Flights: 28");
+  console.log("======================================");
 }
 
-// ---------------------------------------------------------
+// =========================================================
 // RUN SEED
-// ---------------------------------------------------------
+// =========================================================
 
 main()
-  .catch((e) => {
-    console.error(e);
+  .catch((error) => {
+    console.error("Seed failed:");
+    console.error(error);
+
     process.exit(1);
   })
   .finally(async () => {

@@ -4,7 +4,7 @@ export class AirportRepository {
 
     async getAirportByCity(cityId) {
         try {
-            if(cityId) {
+            if (cityId) {
                 const airports = await prisma.airport.findMany({
                     where: {
                         cityId
@@ -16,7 +16,34 @@ export class AirportRepository {
             return airports;
         } catch (error) {
             console.log("Something went wrong in the repository layer");
-            throw {error};
+            throw { error };
+        }
+    }
+
+    async createAirport(data) {
+        try {
+            const airport = await prisma.airport.create({
+                data
+            })
+            return airport;
+        } catch (error) {
+            console.log("Something went wrong in the repository layer");
+            throw { error };
+        }
+    }
+
+    async destroyAirport(airportId) {
+        try {
+            await prisma.airport.delete({
+                where: {
+                    id: airportId
+                }
+            })
+            return true;
+        } catch (error) {
+            console.log("Something went wrong in the repository layer");
+            throw { error };
+
         }
     }
 }

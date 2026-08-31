@@ -12,4 +12,6 @@ router.patch("/cities/:id", cityController.update);
 
 
 router.get("/airports", airportController.getAirportByCity);
+router.post("/airports", airportController.createAirport);
+router.delete("/airports/:id", airportController.destroyAirport);
 export default router;
