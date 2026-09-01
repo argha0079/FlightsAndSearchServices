@@ -1,6 +1,10 @@
 import { prisma } from "../config/dbConfig.js";
+import CrudRepository from "./crud-repository.js";
 
-export class AirportRepository {
+export class AirportRepository extends CrudRepository{
+    constructor() {
+        super(prisma.airport);
+    }
 
     async getAirportByCity(cityId, filter) {
         try {
@@ -12,7 +16,7 @@ export class AirportRepository {
                 })
                 return airports;
             }
-            if(filter) {
+            if(filter?.name) {
                 const airports = await prisma.airport.findMany({
                     where: {
                         name: {
@@ -30,30 +34,4 @@ export class AirportRepository {
         }
     }
 
-    async createAirport(data) {
-        try {
-            const airport = await prisma.airport.create({
-                data
-            })
-            return airport;
-        } catch (error) {
-            console.log("Something went wrong in the repository layer");
-            throw { error };
-        }
-    }
-
-    async destroyAirport(airportId) {
-        try {
-            await prisma.airport.delete({
-                where: {
-                    id: airportId
-                }
-            })
-            return true;
-        } catch (error) {
-            console.log("Something went wrong in the repository layer");
-            throw { error };
-
-        }
-    }
 }

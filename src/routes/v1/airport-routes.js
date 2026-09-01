@@ -6,6 +6,6 @@ const router = Router();
 // Airport routes
 router.get("/", airportController.getAirportByCity);
 router.post("/", airportController.createAirport);
-router.delete("/:id", airportController.destroyAirport);
+router.delete("/:id", airportController.deleteAirport);
 
 export default router;

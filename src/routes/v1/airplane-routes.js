@@ -7,6 +7,6 @@ const router = Router();
 router.get("/:id", airplaneController.getAirplaneById);
 router.get("/", airplaneController.getAllAirplanes);
 router.post("/", airplaneController.createAirplane);
-router.delete("/:id", airplaneController.destroyAirplane);
+router.delete("/:id", airplaneController.deleteAirplane);
 
 export default router;

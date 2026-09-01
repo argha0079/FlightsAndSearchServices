@@ -1,10 +1,13 @@
 import { prisma } from "../config/dbConfig.js";
+import CrudRepository from "./crud-repository.js";
 
-export class FlightRepository {
+export class FlightRepository extends CrudRepository{
 
+    constructor() {
+        super(prisma.flight);
+    }
     #createFilter(data) {
         let filter = {};
-
         if (data.departureAirportId) {
             filter.departureAirportId = Number(data.departureAirportId);
         }
@@ -21,32 +24,6 @@ export class FlightRepository {
             }
         }
         return filter;
-    }
-
-    async createFlight(data) {
-        try {
-            const flight = await prisma.flight.create({
-                data
-            })
-            return flight;
-        } catch (error) {
-            console.log("Something went wrong in the repository layer");
-            throw { error };
-        }
-    }
-
-    async getFlight(flightId) {
-        try {
-            const flight = await prisma.flight.findUnique({
-                where: {
-                    id: flightId,
-                }
-            })
-            return flight;
-        } catch (error) {
-            console.log("Something went wrong in the repository layer");
-            throw { error };
-        }
     }
 
     async getAllFlights(filter) {
@@ -67,4 +44,6 @@ export class FlightRepository {
 
         }
     }
+    
+    
 }

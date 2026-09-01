@@ -1,59 +1,17 @@
 import { CityRepository } from "../repository/index.js";
+import { CrudService } from "./crud-service.js";
 
-export class CityService {
+export class CityService extends CrudService {
 
     constructor() {
-        this.cityRepository = new CityRepository();
-    }
-
-    async createCity(data) {
-
-        try {
-            const city = await this.cityRepository.createCity(data);
-            return city;
-        } catch (error) {
-            console.log("Something went wrong in the service layer");
-            throw { error };
-        }
-    }
-
-    async deleteCity(cityId) {
-
-        try {
-            const response = await this.cityRepository.deleteCity(cityId)
-            return response;
-        } catch (error) {
-            console.log("Something went wrong in the service layer");
-            throw { error };
-        }
-    }
-
-    async updateCity(cityId, data) {
-
-        try {
-            const city = await this.cityRepository.updateCity(cityId, data)
-            return city;
-            
-        } catch (error) {
-            console.log("Something went wrong in the service layer");
-            throw {error};
-        }
-    }
-
-    async getCity(cityId) {
-
-        try {
-            const city = await this.cityRepository.getCity(cityId)
-            return city;
-        } catch (error) {
-            console.log("Something went wrong in the service layer");
-            throw {error};
-        }
+        const cityRepository = new CityRepository();
+        super(cityRepository);
+        this.cityRepository = cityRepository;
     }
 
     async getAll(filter) {
         try {
-            const cities = await this.cityRepository.getAllCities({ name: filter.name });
+            const cities = await this.repository.getAll({ name: filter.name });
             return cities;
         } catch (error) {
             console.log("Something went wrong in the service layer");

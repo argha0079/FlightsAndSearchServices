@@ -25,7 +25,7 @@ export const getAirportByCity = async (req, res) => {
 export const createAirport = async (req, res) => {
     try {
         const data = req.body;
-        const airport = await airportService.createAirport(data);
+        const airport = await airportService.create(data);
         return res.status(201).json({
             data: airport,
             success: true,
@@ -41,11 +41,11 @@ export const createAirport = async (req, res) => {
         })
     }
 }
-export const destroyAirport = async (req, res) => {
+export const deleteAirport = async (req, res) => {
 
     try {
         const airportId = Number(req.params.id);
-        const response = await airportService.destroyAirport(airportId);
+        const response = await airportService.delete(airportId);
         return res.status(200).json({
             data: response,
             success: true,
