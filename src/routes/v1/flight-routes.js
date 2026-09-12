@@ -5,6 +5,7 @@ const router = Router();
 
 router.post("/", flightController.createFlight);
 router.get("/", flightController.getAll);
-
+router.get("/:id", flightController.getById);
+router.patch("/:id", flightController.updateFlight);
 
 export default router;
